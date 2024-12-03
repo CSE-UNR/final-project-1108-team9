@@ -9,7 +9,7 @@
 
 void getWords(char inputArray[][SIZE], char madlibCharArray[]);
 void findInputWords(FILE* filePointer, int row, char array[row]);
-void PrintText(FILE* madlib, int row, char *strings[row]);
+void PrintText(FILE* madlib, char *strings[][SIZE]);
 
 int main(){
    FILE* filePointer;
@@ -38,7 +38,7 @@ int main(){
        printf("Error opening file.\n");
        return 0;
    }
-   PrintText(filePointer, SIZE, stringArray);
+   PrintText(filePointer, stringArray);
    fclose(filePointer);
 
    return 0;
@@ -86,20 +86,21 @@ void findInputWords(FILE* filePointer, int row, char array[row]) {
 
 
 
+void PrintText(FILE* madlib, char strings[][SIZE]){
+	char madin[SIZE];
+	int i = 0, j;
 
-void PrintText(FILE* madlib, int row, char *strings[row]){
-  char madin[MAXCHAR];
-  int i;
-
-  while(fscanf(madlib, "%s", madin) == 1){
-      if(madin == "N\n\0" || madin == "A\n\0" || madin == "V\n\0"){
-          printf("%s\n", strings[i]);
-          i++;
-      } else{
-          printf("%s", madin);
-      }
-  }
+	while(fgets(madin, SIZE, madlib) != NULL){
+		if(madin[0] == 'N' || madin[0] == 'A' || madin[0] == 'V'){
+			printf("%s ", strings[i]);
+			i++;
+		} 
+		else{
+			for(j = 0; madin[j] != '\n'; j++);
+			madin[j] = ' ';
+			printf("%s", madin);
+		}
+	}
+	printf("\n");
 }
-
-
 
