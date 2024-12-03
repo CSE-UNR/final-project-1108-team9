@@ -9,7 +9,7 @@
 
 void getWords(char inputArray[][SIZE], char madlibCharArray[]);
 void findInputWords(FILE* filePointer, int row, char array[row]);
-void PrintText(FILE* madlib, char *strings[][SIZE]);
+void PrintText(FILE* madlib, int rows, int colm, char *strings[][colm]);
 
 int main(){
    FILE* filePointer;
@@ -38,7 +38,7 @@ int main(){
        printf("Error opening file.\n");
        return 0;
    }
-   PrintText(filePointer, stringArray);
+   PrintText(filePointer, SIZE, SIZE, stringArray);
    fclose(filePointer);
 
    return 0;
@@ -86,7 +86,7 @@ void findInputWords(FILE* filePointer, int row, char array[row]) {
 
 
 
-void PrintText(FILE* madlib, char strings[][SIZE]){
+void PrintText(FILE* madlib, int rows, int colm, char strings[][colm]){
 	char madin[SIZE];
 	int i = 0, j;
 
