@@ -9,7 +9,7 @@
 
 void getWords(char inputArray[][SIZE], char madlibCharArray[]);
 void findInputWords(FILE* filePointer, int row, char array[row]);
-void PrintText(FILE* madlib, int rows, int colm, char *strings[][colm]);
+void PrintText(FILE* madlib, int rows, int colm, char strings[][colm]);
 
 int main(){
    FILE* filePointer;
