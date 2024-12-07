@@ -7,100 +7,76 @@
 #define SIZE 100
 #define FILE_NAME "madlib1.txt"
 
-void getWords(char inputArray[][SIZE], char madlibCharArray[]);
-void findInputWords(FILE* filePointer, int row, char array[row]);
-void PrintText(FILE* madlib, int rows, int colm, char strings[][colm]);
+int readFileInto2DArray(FILE* filePointer, int row, int col, char array[][col]);
+void getWords(int row, char inputArray[SIZE][SIZE]);
+void PrintText(int rows, int colm, char strings[][colm]);
 
 int main(){
    FILE* filePointer;
+   int row;
    char stringArray[SIZE][SIZE];
-   char charArray[SIZE];
-
-   for (int i = 0; i < SIZE; i++) {
-       charArray[i] = '\0';
-       for (int j = 0; j < SIZE; j++) {
-           stringArray[i][j] = '\0';
-       }
-   }
 
    filePointer = fopen(FILE_NAME, "r");
    if (filePointer == NULL) {
        printf("Error opening file.\n");
        return 0;
    }
-   findInputWords(filePointer, SIZE, charArray);
+   row = readFileInto2DArray(filePointer,SIZE, SIZE, stringArray);
    fclose(filePointer);
 
-   getWords(charArray, stringArray);
+   getWords(row, stringArray);
 
-   filePointer = fopen(FILE_NAME, "r");
-   if (filePointer == NULL) {
-       printf("Error opening file.\n");
-       return 0;
-   }
-   PrintText(filePointer, SIZE, SIZE, stringArray);
-   fclose(filePointer);
+   PrintText(row, SIZE, stringArray);
 
    return 0;
+}
+int readFileInto2DArray(FILE* filePointer, int row, int col, char array[][col]) {
+   int i = 0;
+   while (fgets(array[i], col, filePointer) != NULL) {
+       i++;
+   }
+   for (int i = 0; i < row; i++) {
+       for (int j = 0; j < col; j++) {
+           if (array[i][j] == '\n') {
+               array[i][j] = ' ';
+           }
+       }
+   }
+   return i; 
 }
 
 
 //inputArray is string array. madlibCharArray is A N V
-void getWords(char inputArray[][SIZE], char madlibCharArray[]){
-   int ind = 0;
-   while(madlibCharArray[ind] != '\0'){
-       if(madlibCharArray[ind] == 'N'){
+void getWords(int row, char inputArray[][SIZE]){
+   int ind;
+   for(ind = 0; ind < row; ind ++){
+	if(inputArray[ind][0] == 'N'){
            printf("Please enter a noun: ");
-       } else if(madlibCharArray[ind] == 'V') {
-           printf("PLease enter a verb: ");
-       } else {
-           printf("Please enter an adjective: ");
+           scanf("%s", inputArray[ind]);
        }
-       scanf("%s", &inputArray[ind]);
-       ind++;
+	else if(inputArray[ind][0] == 'V') {
+		printf("Please enter a verb: ");
+		scanf("%s", inputArray[ind]);
+       } 
+	else if(inputArray[ind][0] == 'A'){
+		printf("Please enter an adjective: ");
+		scanf("%s", inputArray[ind]);
+       }
+
    }
 }
 
 
+void PrintText(int rows, int colm, char strings[][colm]){
+	int i, j;
 
-
-void findInputWords(FILE* filePointer, int row, char array[row]) {
-  char ch1, ch2;
-  int index = 0;
-  while (fscanf(filePointer, "%c", &ch1) == 1) {
-      if (fscanf(filePointer, "%c", &ch2) == 1) {
-          if ((ch2 == '\n' && (ch1 == 'N' || ch1 == 'V' || ch1 == 'A')) || (ch1 == '\n' && (ch2 == 'N' || ch2 == 'V' || ch2 == 'A'))) {
-              if (ch2 == '\n') {
-                  array[index] = ch1;
-              }
-              else {
-                  array[index] = ch2;
-              }
-              index++;
-          }
-      }
-  }
-}
-
-
-
-
-
-void PrintText(FILE* madlib, int rows, int colm, char strings[][colm]){
-	char madin[SIZE];
-	int i = 0, j;
-
-	while(fgets(madin, SIZE, madlib) != NULL){
-		if(madin[0] == 'N' || madin[0] == 'A' || madin[0] == 'V'){
-			printf("%s ", strings[i]);
-			i++;
-		} 
-		else{
-			for(j = 0; madin[j] != '\n'; j++);
-			madin[j] = ' ';
-			printf("%s", madin);
+	for(i = 0; i < rows; i++){
+		for(j = 0; strings[i][j] != '\0'; j++);
+		if (strings[i][j] == '.' || strings[i][j] == ',' || strings[i][j] == '!' || strings[i][j] == '?'){
+			printf(" ");
 		}
+		printf("%s ", strings[i]);
+		
 	}
 	printf("\n");
 }
-
